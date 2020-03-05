@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ReservationApp</string>
+    <string name="title_textview">The Guest Book</string>
+    <string name="add_guest_button">Add a Guest</string>
+    <string name="close_button">Close</string>
+    <string name="add_header_textview">Add a Guest</string>
+    <string name="male_radiotext">Male</string>
+    <string name="female_radiotext">Female</string>
+    <string name="name_edittext">Guest Name</string>
+    <string name="date_edittext">Check-In Date</string>
+    <string name="room_text">Room Number</string>
+    <string name="save_button">Save</string>
+</resources>
