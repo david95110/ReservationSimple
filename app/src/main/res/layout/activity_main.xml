@@ -61,8 +61,9 @@
         style="@style/AppButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="106dp"
         android:layout_margin="@dimen/dimen_16dp"
+        android:layout_marginEnd="106dp"
+        android:padding="@dimen/dimen_16dp"
         android:text="@string/add_guest_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/close_app_button"
@@ -74,9 +75,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dimen_16dp"
+        android:padding="@dimen/dimen_16dp"
         android:text="@string/close_button"
-        app:layout_constraintStart_toEndOf="@id/add_guest_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toEndOf="@id/add_guest_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

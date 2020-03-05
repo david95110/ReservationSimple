@@ -1,10 +1,15 @@
 package com.bb.reservationapp.model;
 
-public class Guest {
+import java.io.Serializable;
+
+public class Guest implements Serializable {
     private String name;
     private String gender;
     private String checkDate;
     private String room;
+
+    public Guest() {
+    }
 
     public Guest(String name, String gender, String checkDate, String room) {
         this.name = name;
@@ -44,4 +49,5 @@ public class Guest {
     public void setRoom(String room) {
         this.room = room;
     }
+
 }

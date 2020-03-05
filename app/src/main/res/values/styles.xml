@@ -18,6 +18,7 @@
     <style name="AppButton" parent="AppTitle">
         <item name="android:background">@drawable/button_bg</item>
         <item name="android:fontFamily">@font/allerta</item>
+        <item name="android:textSize">@dimen/dimen_20sp</item>
     </style>
     <style name="cardTitle">
         <item name="android:fontFamily">@font/roboto_bold</item>

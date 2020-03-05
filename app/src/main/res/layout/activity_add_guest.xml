@@ -21,10 +21,11 @@
         android:id="@+id/gender_imageview"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:padding="@dimen/dimen_16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/label_textview"
-        android:src="@drawable/icon_female" />
+        android:src="@drawable/icon_male" />
 
     <RadioGroup
         android:id="@+id/gender_select_radio_group"
@@ -40,16 +41,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorYellow"
+            android:buttonTint="@color/colorWhite"
             android:text="@string/male_radiotext"
-            />
+            android:checked="true"
+            android:textColor="@color/colorWhite" />
 
         <RadioButton
             android:id="@+id/female_radio_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorYellow"
+            android:buttonTint="@color/colorWhite"
             android:text="@string/female_radiotext"
-            android:checked="true"/>
+            android:textColor="@color/colorWhite" />
     </RadioGroup>
 
     <EditText
@@ -59,6 +63,7 @@
         android:layout_margin="@dimen/dimen_16dp"
         android:hint="@string/name_edittext"
         android:inputType="textPersonName"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gender_select_radio_group" />
@@ -70,6 +75,7 @@
         android:layout_margin="@dimen/dimen_16dp"
         android:hint="@string/date_edittext"
         android:inputType="date"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name_edittext" />
@@ -81,6 +87,7 @@
         android:layout_margin="@dimen/dimen_16dp"
         android:hint="@string/room_text"
         android:inputType="textPersonName"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkdate_edittext" />
@@ -92,6 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dimen_16dp"
+        android:padding="16dp"
         android:text="@string/save_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

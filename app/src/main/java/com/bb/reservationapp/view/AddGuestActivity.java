@@ -46,19 +46,16 @@ public class AddGuestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_guest);
         ButterKnife.bind(this);
 
-        genderRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
-                    case R.id.male_radio_button:
-                        gender = "M";
-                        genderImageView.setImageDrawable(getDrawable(R.drawable.icon_male));
-                        break;
-                    case R.id.female_radio_button:
-                        gender = "F";
-                        genderImageView.setImageDrawable(getDrawable(R.drawable.icon_female));
-                        break;
-                }
+        genderRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId){
+                case R.id.male_radio_button:
+                    gender = "M";
+                    genderImageView.setImageDrawable(getDrawable(R.drawable.icon_male));
+                    break;
+                case R.id.female_radio_button:
+                    gender = "F";
+                    genderImageView.setImageDrawable(getDrawable(R.drawable.icon_female));
+                    break;
             }
         });
     }
@@ -73,7 +70,7 @@ public class AddGuestActivity extends AppCompatActivity {
             Guest guest = new Guest(name, gender, date, room);
 
             Intent guestIntent = new Intent();
-            guestIntent.putExtra(GUEST_KEY, (Serializable) guest);
+            guestIntent.putExtra(GUEST_KEY, guest);
 
             setResult(MainActivity.REQUEST_CODE, guestIntent);
             finish();
