@@ -16,6 +16,7 @@ import com.bb.reservationapp.model.Guest;
 import com.bb.reservationapp.view.MainActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -67,7 +68,8 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
         }
 
         Glide.with(holder.itemView.getContext())
-            .load(drawable).into(holder.genderImageView);
+                .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
+                .load(drawable).into(holder.genderImageView);
         Log.d("TAG_X", "onBindViewHolder2");
     }
 
