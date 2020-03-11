@@ -2,19 +2,23 @@ package com.bb.reservationapp.view;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.bb.reservationapp.R;
 import com.bb.reservationapp.adapter.GuestAdapter;
+import com.bb.reservationapp.database.GuestDatabaseHelper;
 import com.bb.reservationapp.model.Guest;
 
 import java.io.BufferedReader;
@@ -30,15 +34,15 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements GuestAdapter.Reservation {
 
-    private Button closeApp;
+    private GuestDatabaseHelper guestDatabaseHelper;
+
+    private ImageButton deleteGuest;
+
+    private List guestList = new ArrayList<Guest>();
 
     public static final int REQUEST_CODE = 707;
 
     private List<Guest> guests = new ArrayList<>();
-
-    private String fileName = "Guests.txt";
-
-    private String delimiter = "|";
 
 
     @BindView(R.id.main_recyclerview)
@@ -49,19 +53,42 @@ public class MainActivity extends AppCompatActivity implements GuestAdapter.Rese
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        //closeActivity();
 
-// fix method to close application
-//    @OnClick(R.id.close_app_button)
-//    void closeActivity() {
-//        closeApp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        }
-//        );
+        guestDatabaseHelper = new GuestDatabaseHelper(this, null, null, 0);
+
+
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(guestRecyclerView);
    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        readFromDatabase();
+    }
+
+    private void readFromDatabase() {
+        Cursor guestCursor = guestDatabaseHelper.readAllGuests();
+        guestCursor.moveToPosition(-1);
+
+        guestList.clear();
+        Log.d("TAG_X", "list cleared..");
+        while(guestCursor.moveToNext()) {
+
+            Log.d("TAG_X", ".....readiing.....");
+            String guestName = guestCursor.getString(guestCursor.getColumnIndex(GuestDatabaseHelper.COLUMN_GUEST_NAME));
+            int guestId = guestCursor.getInt(guestCursor.getColumnIndex(GuestDatabaseHelper.COLUMN_GUEST_ID));
+            String guestGender = guestCursor.getString(guestCursor.getColumnIndex(GuestDatabaseHelper.COLUMN_GUEST_GENDER));
+            String guestDate = guestCursor.getString(guestCursor.getColumnIndex(GuestDatabaseHelper.COLUMN_GUEST_CHECK_DATE));
+            String guestRoom = guestCursor.getString(guestCursor.getColumnIndex(GuestDatabaseHelper.COLUMN_ROOM_NUMBER));
+
+            guestList.add(new Guest(guestId, guestName, guestGender, guestDate, guestRoom));
+        }
+        Log.d("TAG_X", "READ COMPLETE");
+        updateRecyclerView();
+        guestCursor.close();
+    }
 
 
     @OnClick(R.id.add_guest_button)
@@ -70,83 +97,37 @@ public class MainActivity extends AppCompatActivity implements GuestAdapter.Rese
         startActivityForResult(addGuest, REQUEST_CODE);
     }
 
+//    @OnClick(R.id.delete_imageButton)
+//    public void deleteGuest() {
+//        deleteGuest();
+//    }
+
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE) {
-            Guest guest = null;
-            if (data != null){
-                guest = (Guest) data.getSerializableExtra(AddGuestActivity.GUEST_KEY);
-                guests.add(guest);
-
-            try {
-                writeToInternalStorage(guest);
-                readFromInternalStorage();
-            } catch (IOException e) {
-                Log.d("TAG_X", e.getLocalizedMessage());
-                e.printStackTrace();
-            }
-            }
-            updateRecyclerView();
-        }
+    public void deleteGuest(Guest deleteGuest) {
+        guestDatabaseHelper.deleteGuest(deleteGuest);
+        readFromDatabase();
     }
 
     private void updateRecyclerView() {
-
-        GuestAdapter adapter = new GuestAdapter(guests, this);
-
-        guestRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        guestRecyclerView.setAdapter(null);
+        Log.d("TAG_X", "updateRecyclerView "+guestList.size());
+        GuestAdapter adapter = new GuestAdapter(guestList, this);
         guestRecyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        guestRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+
+
+
+    @Override
+    public void getGuest(Guest guest) {
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d("TAG_X", "onDestroy");
-    }
-
-    private void writeToInternalStorage(Guest guest) throws IOException {
-
-        FileOutputStream fileOS = openFileOutput(fileName, Context.MODE_APPEND);
-        String guestText = guest.getName() + delimiter + guest.getGender() + delimiter
-                + guest.getCheckDate() + delimiter + guest.getRoom() + "\n";
-
-        Log.d("TAG_X", "Write started.");
-
-        byte[] bytes = guestText.getBytes();
-        fileOS.write(bytes);
-        fileOS.close();
-        Log.d("TAG_X", "Write complete.");
-    }
-
-    private void readFromInternalStorage() throws IOException {
-
-        FileReader fileReader = new FileReader(getFilesDir().getPath() + "/" + fileName);
-        BufferedReader reader = new BufferedReader(fileReader);
-
-        String readIn = null;
-
-        while ((readIn = reader.readLine()) != null) {
-
-            Log.d("TAG_X", "Line from file : " + readIn);
-
-            // split data from readIn string and add into new array
-            String [] g = readIn.split("\\" + delimiter);
-            Guest gt = new Guest(g[0], g[1], g[2], g[3]);
-            guests.add(gt);
-        }
-        Log.d("TAG_X", "guest check " + guests.get(0).getName());
-
-        updateRecyclerView();
-        reader.close();
-
-    }
-
-    @Override
-    public void getGuest(Guest guest) {
-
+        guestDatabaseHelper.close();
     }
 }

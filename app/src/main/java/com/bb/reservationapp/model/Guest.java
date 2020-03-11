@@ -2,7 +2,8 @@ package com.bb.reservationapp.model;
 
 import java.io.Serializable;
 
-public class Guest implements Serializable {
+public class Guest {
+    private int guestId;
     private String name;
     private String gender;
     private String checkDate;
@@ -11,11 +12,27 @@ public class Guest implements Serializable {
     public Guest() {
     }
 
+    public Guest(int guestId, String name, String gender, String checkDate, String room) {
+        this.guestId = guestId;
+        this.name = name;
+        this.gender = gender;
+        this.checkDate = checkDate;
+        this.room = room;
+    }
+
     public Guest(String name, String gender, String checkDate, String room) {
         this.name = name;
         this.gender = gender;
         this.checkDate = checkDate;
         this.room = room;
+    }
+
+    public int getGuestId() {
+        return guestId;
+    }
+
+    public void setGuestId(int guestId) {
+        this.guestId = guestId;
     }
 
     public String getName() {

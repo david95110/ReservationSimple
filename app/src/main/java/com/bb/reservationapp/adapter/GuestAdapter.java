@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,10 +32,12 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
     public GuestAdapter(List<Guest>guestList, Reservation reservation){
         this.guestList = guestList;
         this.reservation = reservation;
+        Log.d("TAG_X", "Constructor...");
     }
 
     public interface Reservation{
         void getGuest(Guest guest);
+        void deleteGuest(Guest deleteGuest);
     }
 
     @NonNull
@@ -48,14 +51,20 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
     @Override
     public void onBindViewHolder(@NonNull GuestViewHolder holder, final int position) {
         Log.d("TAG_X", "onBindViewHolder");
+
         holder.itemView.setOnClickListener((View view)-> {
             reservation.getGuest(guestList.get(position));
+        });
+
+        holder.itemView.setOnClickListener((View view)-> {
+            reservation.deleteGuest(guestList.get(position));
         });
 
         holder.nameTextView.setText(guestList.get(position).getName());
         holder.dateTextView.setText(guestList.get(position).getCheckDate());
         holder.roomTextView.setText(guestList.get(position).getRoom());
-        Log.d("TAG_X", "onBindViewHolder0");
+//        Log.d("TAG_X", "onBindViewHolder0");
+
         Drawable drawable = null;
 
         switch (guestList.get(position).getGender()){
@@ -91,6 +100,9 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
 
         @BindView(R.id.room_textview)
         TextView roomTextView;
+
+        @BindView(R.id.delete_imageButton)
+        ImageButton deleteImageButton;
 
         public GuestViewHolder(@NonNull View itemView) {
             super(itemView);

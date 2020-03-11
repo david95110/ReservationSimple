@@ -10,4 +10,5 @@
     <string name="date_edittext">Check-In Date</string>
     <string name="room_text">Room Number</string>
     <string name="save_button">Save</string>
+    <string name="delete_button">Delete</string>
 </resources>
