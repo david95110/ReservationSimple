@@ -32,7 +32,7 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
     public GuestAdapter(List<Guest>guestList, Reservation reservation){
         this.guestList = guestList;
         this.reservation = reservation;
-        Log.d("TAG_X", "Constructor...");
+//        Log.d("TAG_X", "Constructor...");
     }
 
     public interface Reservation{
@@ -50,7 +50,7 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
 
     @Override
     public void onBindViewHolder(@NonNull GuestViewHolder holder, final int position) {
-        Log.d("TAG_X", "onBindViewHolder");
+//        Log.d("TAG_X", "onBindViewHolder");
 
         holder.itemView.setOnClickListener((View view)-> {
             reservation.getGuest(guestList.get(position));
@@ -61,8 +61,8 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
         });
 
         holder.nameTextView.setText(guestList.get(position).getName());
-        holder.dateTextView.setText(guestList.get(position).getCheckDate());
-        holder.roomTextView.setText(guestList.get(position).getRoom());
+        holder.dateTextView.setText("Check In Date: " + guestList.get(position).getCheckDate());
+        holder.roomTextView.setText("Room Number: " + guestList.get(position).getRoom());
 //        Log.d("TAG_X", "onBindViewHolder0");
 
         Drawable drawable = null;
@@ -79,7 +79,7 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
         Glide.with(holder.itemView.getContext())
                 .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
                 .load(drawable).into(holder.genderImageView);
-        Log.d("TAG_X", "onBindViewHolder2");
+//        Log.d("TAG_X", "onBindViewHolder2");
     }
 
     @Override

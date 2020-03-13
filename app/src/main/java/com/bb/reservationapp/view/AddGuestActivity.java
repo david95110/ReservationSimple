@@ -26,8 +26,6 @@ public class AddGuestActivity extends AppCompatActivity {
 
         GuestDatabaseHelper databaseHelper;
 
-        SQLiteDatabase sqLiteDatabase;
-
         @BindView(R.id.gender_imageview)
         ImageView genderImageView;
 
@@ -51,7 +49,8 @@ public class AddGuestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_guest);
         ButterKnife.bind(this);
 
-        databaseHelper = new GuestDatabaseHelper(this, null, null, 0);
+//        databaseHelper = new GuestDatabaseHelper(this, null, null, 0);
+        databaseHelper = new GuestDatabaseHelper(this);
         genderRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId){
                 case R.id.male_radio_button:

@@ -7,9 +7,11 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -54,8 +56,11 @@ public class MainActivity extends AppCompatActivity implements GuestAdapter.Rese
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        guestDatabaseHelper = new GuestDatabaseHelper(this, null, null, 0);
+        readFromContentProvider();
 
+//        guestDatabaseHelper = new GuestDatabaseHelper(this, null, null, 0);
+        guestDatabaseHelper = new GuestDatabaseHelper(this);
+        readFromDatabase();
 
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(guestRecyclerView);
@@ -73,10 +78,10 @@ public class MainActivity extends AppCompatActivity implements GuestAdapter.Rese
         guestCursor.moveToPosition(-1);
 
         guestList.clear();
-        Log.d("TAG_X", "list cleared..");
+//        Log.d("TAG_X", "list cleared..");
         while(guestCursor.moveToNext()) {
 
-            Log.d("TAG_X", ".....readiing.....");
+//            Log.d("TAG_X", ".....readiing.....");
             String guestName = guestCursor.getString(guestCursor.getColumnIndex(GuestDatabaseHelper.COLUMN_GUEST_NAME));
             int guestId = guestCursor.getInt(guestCursor.getColumnIndex(GuestDatabaseHelper.COLUMN_GUEST_ID));
             String guestGender = guestCursor.getString(guestCursor.getColumnIndex(GuestDatabaseHelper.COLUMN_GUEST_GENDER));
@@ -85,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements GuestAdapter.Rese
 
             guestList.add(new Guest(guestId, guestName, guestGender, guestDate, guestRoom));
         }
-        Log.d("TAG_X", "READ COMPLETE");
+//        Log.d("TAG_X", "READ COMPLETE");
         updateRecyclerView();
         guestCursor.close();
     }
@@ -96,12 +101,6 @@ public class MainActivity extends AppCompatActivity implements GuestAdapter.Rese
         Intent addGuest = new Intent(this, AddGuestActivity.class);
         startActivityForResult(addGuest, REQUEST_CODE);
     }
-
-//    @OnClick(R.id.delete_imageButton)
-//    public void deleteGuest() {
-//        deleteGuest();
-//    }
-
 
     @Override
     public void deleteGuest(Guest deleteGuest) {
@@ -116,7 +115,27 @@ public class MainActivity extends AppCompatActivity implements GuestAdapter.Rese
         guestRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    private void readFromContentProvider() {
 
+        String uri = "content://com.bb.reservationapp.provider.GuestProvider/guests/10";
+
+        ContentResolver contentResolver = getContentResolver();
+        Cursor guestsCursor = contentResolver.query(Uri.parse(uri), null, null, null, null);
+
+        if(guestsCursor != null) {
+            guestsCursor.moveToPosition(-1);
+
+
+            while (guestsCursor.moveToNext()) {
+
+                String guestName = guestsCursor.getString(guestsCursor.getColumnIndex(guestDatabaseHelper.COLUMN_GUEST_NAME));
+                Log.d("TAG_X", "From Provider : " + guestName);
+            }
+        }
+        if (guestsCursor != null) {
+            guestsCursor.close();
+        }
+    }
 
 
     @Override
@@ -127,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements GuestAdapter.Rese
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("TAG_X", "onDestroy");
+//        Log.d("TAG_X", "onDestroy");
         guestDatabaseHelper.close();
     }
 }
