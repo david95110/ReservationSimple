@@ -4,3 +4,5 @@ Refactor the hotel guest list application to use a RecyclerView
 Extras
 Add animations to your items
 Use Parcelable instead of Serializable
+
+Update concept Room
